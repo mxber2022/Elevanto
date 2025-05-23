@@ -2,10 +2,19 @@ import { SafeAreaView, Text, View } from "react-native";
 import Constants from "expo-constants";
 import LoginScreen from "@/components/LoginScreen";
 import { usePrivy } from "@privy-io/expo";
-import { UserScreen } from "@/components/UserScreen";
+import { useRouter } from "expo-router";
+import { useEffect } from "react";
 
 export default function Index() {
   const { user } = usePrivy();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (user) {
+      router.replace("/home");
+    }
+  }, [user]);
+
   if ((Constants.expoConfig?.extra?.privyAppId as string).length !== 25) {
     return (
       <SafeAreaView>
@@ -40,5 +49,5 @@ export default function Index() {
       </SafeAreaView>
     );
   }
-  return !user ? <LoginScreen /> : <UserScreen />;
+  return <LoginScreen />;
 }
